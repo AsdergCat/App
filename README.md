@@ -29,3 +29,10 @@ Proyecto de prueba para postulación a práctica en Lab4U
     - Perfil de Otros Usuarios
     - Editar Otros Usuarios
     - Eliminar Otros Usuarios
+
+# Usuarios Predefinidos
+- Usuario Admin
+  - admin  |  admin
+- Usuario Cliente
+  - Cliente   |  alfalfa8
+  - Cliente2  |  alfalfa8
