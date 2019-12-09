@@ -1,0 +1,81 @@
+{% extends 'main/index.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block static_stuff %}
+<link rel="stylesheet" type="text/css" href="{% static 'usuarios/general.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Contenido -->
+<div class="p-3 container-fluid">
+    <!-- Titulo -->
+    <div class="titulo-cont container-fluid">
+        <span class="titulo">Editar Perfil de Usuario</span>
+    </div>
+
+    {% if ORM %}
+        <!-- Si hubo problemas al momento de consultar la BD -->
+        {% if user.profile.es_admin %}
+        <p>* El Usuario con PK: no fue encontrado en la Base de Datos</p>
+        {% elif user.profile.es_usuario %}
+        <p>* Hubo un error al recuperar los datos desde el Servidor, intente de nuevo más tarde</p>
+        {% endif %}
+    {% else %}
+    <!-- Formulario de Edición -->
+    <form method="POST" >
+            {% csrf_token %} 
+            
+            <!-- Arma el formulario -->
+            {% for field in form_reg %}
+            
+            <div class="form-group row ml-0">
+                <label class="col-form-label w-11rem" for="{{ field.auto_id }}">{{ field.label }}</label>
+                <div class="col-sm-11 col-md-8 col-lg-7 col-xl-6">
+                    {{ field | add_class:'form-control '}}
+                </div>
+            </div>
+    
+            {% endfor %} 
+    
+            <!-- Errores de validación de Modelo -->
+            <!-- Las validaciones del formulario se llevan a cabo por Bootstrap o Django -->
+            {% if  form_reg.errors %}
+                {% for field in  form_reg %}
+                    {% for error in field.errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+    
+                {% for error in  form_reg.non_field_errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                {% endfor %}
+            {% endif %}
+    
+            <button type="submit" class="btn btn-primary mr-3">Aceptar</button>
+    
+            <input type="hidden" name="next" value="{{ next }}" />
+            <!-- Boton Cancelar -->
+            <a href="{% url 'usuarios:perfil_usuario' pk=usuario.pk desde_lst=desde_lst %}" class="btn btn-secondary" role="button">Cancelar</a>
+    
+        </form>
+    {% endif %}
+
+</div>
+
+<script type="text/javascript">
+    // Necesario para pasar la región y comuna 
+    // el script las define despues de poblar las combobox
+    (function () {
+        window.reg = '{{region}}';
+        window.com = '{{comuna}}';
+    }());
+</script>
+<!-- Llena los combobox con región y comuna de manera dinámica -->
+<script type="text/javascript" src="{% static 'main/JS/comunaRegionComboBox.js' %}"></script>
+
+{% endblock %}

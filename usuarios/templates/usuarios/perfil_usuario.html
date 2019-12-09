@@ -1,0 +1,86 @@
+{% extends 'main/index.html' %}
+{% load static %}
+
+
+{% block static_stuff %}
+<link rel="stylesheet" type="text/css" href="{% static 'usuarios/general.css' %}"> 
+{% endblock %}
+
+{% block content %}
+
+<!-- Contenido -->
+<div class="p-3 container-fluid">
+
+    <!-- Titulo -->
+    <div class="titulo-cont container-fluid">
+        <span class="titulo">Perfil de Usuario</span>
+    </div>
+    
+    <!-- Mensajes de Errore -->
+    {% if errors != '' %}
+        <p style="color: red;">{{ errors }} </p>
+    {% endif %}
+
+    {% if ORM %}
+        <!-- Si hubo problemas al momento de consultar la BD -->
+        {% if user.profile.es_admin %}
+        <p>* El Usuario solicitado no fue encontrado en la Base de Datos</p>
+        {% elif user.profile.es_usuario %}
+        <p>* Hubo un error al recuperar los datos desde el Servidor, intente de nuevo más tarde</p>
+        {% endif %}
+    {% else %}
+
+        <!-- Arma el Perfil -->
+        <div class='pl-xl-4 pl-lg-4 pl-md-3 pl-sm-2 pl-2 mb-3'>
+        {% for key,values in meta.items  %}
+            <div class="row mb-2">
+                <h6 class="perfil-label font-weight-bold text-end"> {{ key }} </h6>
+                <h6 class="perfil-valor ml-2"> {{ values }} </h6>
+            </div>
+        {% endfor %}
+        </div>
+
+        <!-- Boton Editar Usuario -->
+        <a href="{% url 'usuarios:editar_usuario' pk=usuario.pk desde_lst=desde_lst %}" class="btn btn-primary mr-3" role="button">Editar</a>
+        
+        {% if user.profile.es_admin and user.pk != usuario.pk%}
+            <!-- Eliminar Usuario - Solo Admins. Un usuario no se puede eliminar a si mismo -->
+            <a href="#" data-toggle="modal" data-target="#eliminarUsuarioModal" class="btn btn-danger mr-3" role="button">Eliminar</a>
+        {% endif %}
+
+        {% if desde_lst == 1 and user.profile.es_admin%}
+            <!-- Si se viene desde Lista de usuarios se vuelve a esta -->
+            <a href="{% url 'usuarios:lst_usuarios' %}" class="btn btn-secondary" role="button">Volver</a>
+        {% endif %}
+        
+
+                
+        <!-- Modal Confirmación Eliminar -->
+        <div class="modal fade" id="eliminarUsuarioModal" tabindex="-1" role="dialog" aria-labelledby="eliminarUsuarioModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <!-- Titulo -->
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="eliminarUsuarioModalLabel">Eliminar Usuario</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                    </div>
+
+                    <!-- Cuerpo -->
+                    <div class="modal-body"> 
+                        ¿Está seguro/a que desea eliminar a este usuario? 
+                    </div>
+
+                    <!-- Footer con botones de confimarción -->
+                    <div class="modal-footer d-flex justify-content-center">
+                        <button type="button" class="btn btn-secondary btn-w5" data-dismiss="modal">NO</button>
+                        <a href="{% url 'usuarios:eliminar_usuario' pk=usuario.pk desde_lst=desde_lst%}" id="delete" class="btn btn-primary btn-w5">SI</a> 
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

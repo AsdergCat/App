@@ -1,0 +1,65 @@
+{% extends 'main/index.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block static_stuff %}
+<link rel="stylesheet" type="text/css" href="{% static 'usuarios/general.css' %}">
+
+<script type="text/javascript" src="{% static 'main/JS/comunaRegionComboBox.js' %}"></script>
+{% endblock %}
+
+
+{% block content %}
+<!-- Contenido -->
+<div class="p-3 d-flex flex-column">
+    <!-- Titulo -->
+    <div class="titulo-cont container-fluid">
+            <span class="titulo">Registrarse</span>
+    </div>
+
+    <!-- Formulario de Registro -->
+    <form method="POST" id="form_registro_usuario">
+        {% csrf_token %} 
+        
+        <!-- Arma el formulario -->
+        {% for field in form_reg %}
+        
+        <div class="form-group row ml-0">
+            <label class="col-form-label w-11rem" for="{{ field.auto_id }}">{{ field.label }}</label>
+            <div class="col-sm-11 col-md-8 col-lg-7 col-xl-6">
+                {{ field | add_class:'form-control '}}
+            </div>
+        </div>
+
+        {% endfor %} 
+
+        <!-- Errores de validación de Modelo -->
+        <!-- Las validaciones del formulario se llevan a cabo por Bootstrap o Django -->
+        {% if  form_reg.errors %}
+            {% for field in  form_reg %}
+                {% for error in field.errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            {% for error in  form_reg.non_field_errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary" name="registrar">Registrar</button>
+
+        <input type="hidden" name="next" value="{{ next }}" />
+
+    </form>
+
+</div>
+
+
+<script type="text/javascript" src="{% static 'usuarios/registro.js' %}"></script>
+
+{% endblock %}

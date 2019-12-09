@@ -1,0 +1,76 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+body {
+    margin-bottom: 60px; /* Alto del footer */
+}
+/* FOOTER INDEX */
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: min-content;
+    line-height: 60px; /* Centra el Texto */
+    background-color: #f5f5f5;
+}
+.footer > .container {
+    padding: 0px;
+    margin: 0px;
+}
+.footer > .container > span{
+    font-size: 0.8rem;
+    margin-left: 1rem;
+}
+
+/* GENERAL */
+.title-major{
+    font-family: sans-serif;
+    font-weight: 600;
+    letter-spacing: -.04em;
+    color: #505050;
+}
+
+
+.titulo-cont{
+    min-width: max-content;
+    margin-bottom: 1.25rem;
+}
+
+.titulo{
+    color: #505050;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.maxw-maxcon{
+    max-width: max-content;
+}
+
+.mt-8{
+    margin-top: 8rem;
+}
+
+.w-11rem{
+    width: 11rem;
+}
+
+.color-background-box{
+    background: #ced7e0;
+}
+
+.btn-w5{
+    width: 5rem;
+}
+
+
+/* SACA EL SPINNER DE LOS INPUT TYPE:NUMBER */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+input[type=number] {
+  -moz-appearance:textfield;
+}

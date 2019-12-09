@@ -1,0 +1,19 @@
+{% extends 'main/index.html' %}
+{% load static %}
+
+
+{% block static_stuff %}
+<link rel="stylesheet" type="text/css" href="{% static 'main/homepage.css' %}"> 
+{% endblock %}
+
+
+{% block content %}
+<!-- Contenido -->
+<div class="d-flex flex-column align-items-center mt-8">
+    
+    <h1 class="title-major">Registro Exitoso</h1>
+    
+    <a href="{% url 'main:index' %}">Volver a Inicio</a>
+</div>
+
+{% endblock %}

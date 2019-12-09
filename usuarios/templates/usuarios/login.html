@@ -1,0 +1,62 @@
+{% extends 'main/index.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block static_stuff %}
+<link rel="stylesheet" type="text/css" href="{% static 'usuarios/general.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- Contenido -->
+<div class="p-3 d-flex justify-content-center">
+    <!-- Contenedor del formulario -->
+    <div class="d-flex flex-column col-xl-6 col-lg-8 col-md-10 col-sm-12 col-12 p-4 color-background-box">
+        <!-- Título -->
+        <div class="titulo-cont container-fluid d-flex justify-content-center mb-2">
+            <span class="titulo ">Login</span>
+        </div>
+
+        {% if next %}
+        <!-- Mensajes para paginas aseguradas -->
+        <div class="w-100">
+                {% if user.is_authenticated %}
+                    <p class="text-left small"> 
+                        * Tu cuenta no está autorizada para entrar a esta página.
+                        Por favor ingresa con una cuenta autorizada para proseguir.
+                    </p>
+                {% else %}
+                    <p class="text-left small">* Por favor inicia sesión para ver esta página</p>
+                {% endif %}
+        </div>
+        {% endif %}
+
+
+        <!-- Formulario de Login -->
+        <form method="post" action="{% url 'usuarios:login' %}" class="container-fluid d-flex flex-column align-items-center">
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <td class="pr-3 pb-3">Nombre de Usuario</td>
+                    <td>{{ form.username|add_class:'form-control mb-3'}}</td>
+                </tr>
+                <tr>
+                    <td class="pr-3 pb-3">Contraseña</td>
+                    <td>{{ form.password|add_class:'form-control mb-3' }}</td>
+                </tr>
+            </table>
+
+            {% if form.errors %}
+                <!-- Mensaje si el user/clave no son validos -->
+                <p class="text-left small">* Tu clave o contraseña es incorrecta. Intenta de Nuevo.</p>
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary align-self-center">Iniciar Sesión</button>
+
+            <input type="hidden" name="next" value="{{ next }}" />
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,115 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Prueba Técnica</title>
+
+    <!-- JQuery -->
+    <script type="text/javascript" src="{% static 'main/JS/jquery-3.4.1.min.js' %}"></script>
+    <!-- Popper -->
+    <script type="text/javascript" src="{% static 'main/JS/popper.min.js' %}"></script>
+    <!-- Bootstrap 4 -->
+    <link rel="stylesheet" type="text/css" href="{% static 'main/bootstrap.min.css' %}">
+    <script type="text/javascript" src="{% static 'main/JS/bootstrap.js' %}"></script>
+    <!-- Material Icons por Google -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'main/general.css' %}">
+
+    <!-- Carga contenido estatico diferente para cada página -->
+    {% block static_stuff %}
+     
+    {% endblock %}
+
+</head>
+<body>
+    <!-- Barra de Navegación -->
+    <div class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <!-- Botón Menu Colapsado -->
+       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavBarContent" 
+               aria-controls="mainNavBarContent" aria-expanded="false" aria-label="Toggle navigation">
+           <span class="navbar-toggler-icon"></span>
+       </button>
+
+        <!-- Brand -->
+        <a class="navbar-brand mx-auto" href="{% url 'main:index' %}">Lab4U</a>
+
+        <!-- Contenido -->
+        <div id="mainNavBarContent" class="collapse navbar-collapse">
+            <!--Listado -->
+            <ul class="navbar-nav mr-auto">
+                <!-- Link Inicio -->
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'main:index' %}">
+                        Inicio 
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                
+                <!-- Dropdown Adm de Usuarios, solo Admin -->
+                {% if user.is_authenticated and user.profile.es_admin %}
+                <li class="nav-item dropdown">
+                    <a  class="nav-link dropdown-toggle" href="#" id="userDropdown" 
+                        role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Usuarios
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="userDropdown">
+                        <a class="dropdown-item" href="{% url 'usuarios:lst_usuarios' %}">Listado</a>
+                    </div>
+                </li>
+                {% endif %}
+
+            </ul>
+        </div>
+
+        <!-- Dropdown Profile (auth OR <md) -->
+        <div class="dropdown 
+        {% if user.is_authenticated == False %}
+            d-md-none
+        {% endif %} " 
+        id="usuario_dropdown-sm">
+            <!-- Boton -->
+            <button type="button" class="btn dropdown-toggle btn-sm d-flex justify-content-center" data-toggle="dropdown">
+                <i class="material-icons" style="font-size:30px;color:whitesmoke">person</i>
+                <span class="ml-2 mr-2 text-light d-none d-md-block">{{ user.get_username }}</span>
+            </button>
+            <!-- Listado de Opciones -->
+            <div class="dropdown-menu dropdown-menu-right">
+                {% if user.is_authenticated %}
+                    <h6 class="dropdown-header d-md-none">{{ user.get_username }}</h6>
+                    <a class="dropdown-item" href="{% url 'usuarios:perfil_usuario' pk=user.pk desde_lst=0 %}">Perfil</a>
+                    <a class="dropdown-item" href="{% url 'usuarios:logout' %}">Cerrar Sesión</a>
+                {% else %}
+                    <a class="dropdown-item" href="{% url 'usuarios:user_reg' %}">Registrarse</a>
+                    <a class="dropdown-item" href="{% url 'usuarios:login' %}">Iniciar Sesión</a>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <!-- Botones Login/Registro (auth NOR <md) -->
+        {% if user.is_authenticated == False %}
+            <a class="btn btn-primary btn-sm mr-3 d-none d-md-block" href="{% url 'usuarios:user_reg' %}" role="button">Registrarse</a>
+            <a class="btn btn-secondary btn-sm d-none d-md-block" href="{% url 'usuarios:login' %}" role="button">Iniciar Sesión</a>
+        {% endif %}
+    </div>
+
+    <!-- Contenido -->
+    <div class="container-fluid">
+        {% block content %}
+                
+        {% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <span class="text-muted">Prueba Técnica - Lab4U</span>
+      </div>
+    </footer>
+</body>
+</html>

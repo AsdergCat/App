@@ -1,0 +1,16 @@
+{% extends 'main/index.html' %}
+{% load static %}
+
+
+{% block static_stuff %}
+<link rel="stylesheet" type="text/css" href="{% static 'main/homepage.css' %}"> 
+{% endblock %}
+
+
+{% block content %}
+<!-- Contenido -->
+<div class="row justify-content-center align-self-center" id="homepage-cont">
+    <h1 class="title-major">Prueba Ténica.</h1>
+</div>
+
+{% endblock %}
